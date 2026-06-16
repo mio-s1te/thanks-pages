@@ -39,7 +39,7 @@ const PRODUCTS = {
     productName: 'AI副業1日1時間化スタート講座',
     keyword:     '1時間化スタート',
     courseUrl:   'https://celadon-brioche-b5ab0a.netlify.app/',
-    imageUrl:    'https://www.genspark.ai/api/files/s/s0Q2eoYf',
+    imageUrl:    'https://mio-start-course.netlify.app/images/start-course.jpg',
     courseLabel: 'AI副業1時間化スタート講座を受け取る',
   },
   '本気でプロアフィリエイター': {
@@ -47,7 +47,7 @@ const PRODUCTS = {
     productName: 'プロAIアフィリエイター養成講座',
     keyword:     '本気でプロアフィリエイター',
     courseUrl:   'https://AFFILIATE_COURSE_URL_HERE/',  // ← 養成講座URLに変更
-    imageUrl:    'https://www.genspark.ai/api/files/s/JAAmhTXR',
+    imageUrl:    'https://mio-afiliate.netlify.app/images/affiliate-course.jpg',
     courseLabel: 'プロAIアフィリエイター養成講座を受け取る',
   },
   // 将来の講座を追加するときはここに追記するだけ：
