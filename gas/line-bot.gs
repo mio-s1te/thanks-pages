@@ -54,7 +54,7 @@ const PRODUCTS = {
 
 // mainsite の Netlify URL（purchase_code 照合に使う）
 const NETLIFY_API_BASE = PropertiesService.getScriptProperties().getProperty('NETLIFY_API_BASE')
-  || 'https://mainsite-mio.netlify.app'; // ← 実際のURLに変更してください
+  || 'https://mio-mainsite.netlify.app';
 
 
 /****************************************************
