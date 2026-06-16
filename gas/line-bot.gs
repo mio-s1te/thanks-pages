@@ -93,7 +93,7 @@ const FOLLOW_TEXT = `友だち追加ありがとうございます！🎉
 「合言葉」と「購入コード」をそのままこのトークに送ってください📩
 
 例）
-1時間化スタート
+合言葉
 購入コード：start_xxxxxxxxxxxxxxxx`;
 
 const ASK_EMAIL_TEXT = `購入時に使ったメールアドレスを、このトークにそのまま入力してください。
@@ -121,7 +121,7 @@ const LINK_NEED_CODE_TEXT = `合言葉を確認しました。
 購入コードも一緒に送ってください。
 
 例）
-1時間化スタート
+合言葉
 購入コード：start_xxxxxxxxxxxxxxxx`;
 
 const LINK_NOT_FOUND_TEXT = `送っていただいた購入コードを確認しましたが、購入情報がまだ見つかりませんでした。
