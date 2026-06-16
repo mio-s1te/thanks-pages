@@ -226,7 +226,7 @@ function handleLineWebhook(body) {
         const alreadyLinked = linkLineUserToRow_byCode(userId, purchaseCode, purchaseData, sheet);
 
         if (alreadyLinked) {
-          pushTextMessage(userId, '✅ 購入確認済みです。\n\n既に登録済みです。講座URLは以前お送りしたメッセージをご確認ください。');
+          pushTextMessage(userId, '✅ 購入確認済みです！\n\n下のボタンから講座を受け取ってください👇');
           pushCourseCard(userId, matchedProduct);
         } else {
           pushTextMessage(userId, LINK_SUCCESS_TEXT);
