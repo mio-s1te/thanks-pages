@@ -262,7 +262,7 @@ function handleLineWebhook(body) {
           pushTextMessage(userId, `購入情報とメールアドレスを確認できました！\n購入者LINEとして登録しました。`);
         } else {
           pushTextMessage(userId,
-            `メールアドレスを確認しました。\n\nただし購入情報との自動紐づけができませんでした。\n\nサンクスページの内容をそのまま送ってください。\n\n例）\n1時間化スタート\n購入コード：start_xxxxxxxxxxxxxxxx`
+            `メールアドレスを確認しました。\n\nただし購入情報との自動紐づけができませんでした。\n\nサンクスページの内容をそのまま送ってください。\n\n例）\n合言葉\n購入コード：start_xxxxxxxxxxxxxxxx`
           );
         }
         return;
@@ -270,7 +270,7 @@ function handleLineWebhook(body) {
 
       // ── その他のメッセージ ────────────────────────────────
       pushTextMessage(userId,
-        `購入者確認のため、サンクスページの内容をそのまま送ってください。\n\n例）\n1時間化スタート\n購入コード：start_xxxxxxxxxxxxxxxx`
+        `購入者確認のため、サンクスページの内容をそのまま送ってください。\n\n例）\n合言葉\n購入コード：start_xxxxxxxxxxxxxxxx`
       );
     }
   });
