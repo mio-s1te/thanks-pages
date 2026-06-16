@@ -46,7 +46,7 @@ const PRODUCTS = {
     sheetName:   'アフィリエイター養成講座購入者',
     productName: 'プロAIアフィリエイター養成講座',
     keyword:     '本気でプロアフィリエイター',
-    courseUrl:   'https://AFFILIATE_COURSE_URL_HERE/',  // ← 養成講座URLに変更
+    courseUrl:   'https://beamish-gecko-f0cb60.netlify.app/',
     imageUrl:    'https://mio-afiliate.netlify.app/images/affiliate-course.jpg',
     courseLabel: 'プロAIアフィリエイター養成講座を受け取る',
   },
