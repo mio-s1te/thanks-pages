@@ -497,16 +497,20 @@ function setupHeaderIfNeeded(sheet) {
 /****************************************************
  * LINE登録者を全シートに記録（友だち追加時）
  * どの講座の購入者か不明なので全シートをチェックする
+ * ※シートが存在する場合のみ更新・新規行は追加しない
  ****************************************************/
 function registerLineUserToAllSheets(userId) {
   const profile     = getLineProfile(userId);
   const displayName = profile.displayName || '';
   const now         = new Date();
+  const ss          = SpreadsheetApp.getActiveSpreadsheet();
 
   for (const config of Object.values(PRODUCTS)) {
-    const sheet = getSheetByProductName(config.sheetName);
-    const row   = findRowBy(sheet, COL_LINE_USER_ID, userId);
+    // シートが存在しない場合はスキップ（作成しない）
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) continue;
 
+    const row = findRowBy(sheet, COL_LINE_USER_ID, userId);
     if (row) {
       // 既存行のステータスと表示名を更新
       sheet.getRange(row, COL_STATUS).setValue('登録済み');
@@ -523,9 +527,11 @@ function registerLineUserToAllSheets(userId) {
  * 全シートでブロック記録
  ****************************************************/
 function markUserUnfollowedInAllSheets(userId) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
   for (const config of Object.values(PRODUCTS)) {
-    const sheet = getSheetByProductName(config.sheetName);
-    const row   = findRowBy(sheet, COL_LINE_USER_ID, userId);
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) continue;
+    const row = findRowBy(sheet, COL_LINE_USER_ID, userId);
     if (row) {
       sheet.getRange(row, COL_STATUS).setValue('ブロックまたは友だち解除');
       sheet.getRange(row, COL_LAST_MESSAGE_AT).setValue(new Date());
@@ -538,9 +544,11 @@ function markUserUnfollowedInAllSheets(userId) {
  * 全シートで最終メッセージ日時を更新
  ****************************************************/
 function updateLastMessageTimeInAllSheets(userId) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
   for (const config of Object.values(PRODUCTS)) {
-    const sheet = getSheetByProductName(config.sheetName);
-    const row   = findRowBy(sheet, COL_LINE_USER_ID, userId);
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) continue;
+    const row = findRowBy(sheet, COL_LINE_USER_ID, userId);
     if (row) sheet.getRange(row, COL_LAST_MESSAGE_AT).setValue(new Date());
   }
 }
@@ -550,9 +558,11 @@ function updateLastMessageTimeInAllSheets(userId) {
  * 全シートでメール入力待ち状態を設定
  ****************************************************/
 function setWaitingEmailInAllSheets(userId, isWaiting) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
   for (const config of Object.values(PRODUCTS)) {
-    const sheet = getSheetByProductName(config.sheetName);
-    const row   = findRowBy(sheet, COL_LINE_USER_ID, userId);
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) continue;
+    const row = findRowBy(sheet, COL_LINE_USER_ID, userId);
     if (row) sheet.getRange(row, COL_WAITING).setValue(isWaiting ? 'メール入力待ち' : '');
   }
 }
@@ -562,9 +572,11 @@ function setWaitingEmailInAllSheets(userId, isWaiting) {
  * いずれかのシートでメール入力待ち状態か確認
  ****************************************************/
 function isWaitingEmailInAnySheet(userId) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
   for (const config of Object.values(PRODUCTS)) {
-    const sheet = getSheetByProductName(config.sheetName);
-    const row   = findRowBy(sheet, COL_LINE_USER_ID, userId);
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) continue;
+    const row = findRowBy(sheet, COL_LINE_USER_ID, userId);
     if (row && sheet.getRange(row, COL_WAITING).getValue() === 'メール入力待ち') return true;
   }
   return false;
@@ -575,9 +587,11 @@ function isWaitingEmailInAnySheet(userId) {
  * 全シートで同意日時を保存
  ****************************************************/
 function saveConsentAtInAllSheets(userId) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
   for (const config of Object.values(PRODUCTS)) {
-    const sheet = getSheetByProductName(config.sheetName);
-    const row   = findRowBy(sheet, COL_LINE_USER_ID, userId);
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) continue;
+    const row = findRowBy(sheet, COL_LINE_USER_ID, userId);
     if (row) sheet.getRange(row, COL_CONSENT_AT).setValue(new Date());
   }
 }
@@ -588,9 +602,11 @@ function saveConsentAtInAllSheets(userId) {
  ****************************************************/
 function saveEmailInAllSheets(userId, email) {
   const now = new Date();
+  const ss  = SpreadsheetApp.getActiveSpreadsheet();
   for (const config of Object.values(PRODUCTS)) {
-    const sheet = getSheetByProductName(config.sheetName);
-    const row   = findRowBy(sheet, COL_LINE_USER_ID, userId);
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) continue;
+    const row = findRowBy(sheet, COL_LINE_USER_ID, userId);
     if (row) {
       sheet.getRange(row, COL_EMAIL).setValue(email);
       sheet.getRange(row, COL_STATUS).setValue('メール登録済み');
