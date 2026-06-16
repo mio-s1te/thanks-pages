@@ -865,6 +865,44 @@ function doGet() {
 
 
 /****************************************************
+ * 既存購入者3人のpurchase_codeをH列に書き込む
+ * GASエディタから1回だけ手動実行してください
+ ****************************************************/
+function backfillPurchaseCodes() {
+  const SHEET_NAME = 'スタート講座購入者';
+  const ss    = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) { console.log('シートが見つかりません'); return; }
+
+  const data = [
+    { email: 'megumilk150@gmail.com',          code: 'start_8hwsMDj4dDveqaxh' },
+    { email: 'morinaga.koeda.0710@gmail.com',  code: 'start_DJUmPEMrmabV2Sp5' },
+    { email: '0801momiji@gmail.com',           code: 'start_fmBcpq7x4m4n4Rpv' },
+  ];
+
+  const lastRow  = sheet.getLastRow();
+  const emailCol = sheet.getRange(2, COL_EMAIL,   lastRow - 1, 1).getValues();
+  const codeCol  = sheet.getRange(2, COL_KEYWORD, lastRow - 1, 1).getValues();
+
+  data.forEach(({ email, code }) => {
+    for (let i = 0; i < emailCol.length; i++) {
+      if (String(emailCol[i][0]).trim().toLowerCase() === email.toLowerCase()) {
+        // すでにコードが入っていたらスキップ
+        if (codeCol[i][0]) {
+          console.log(`SKIP: ${email} → すでに ${codeCol[i][0]}`);
+          return;
+        }
+        sheet.getRange(i + 2, COL_KEYWORD).setValue(code);
+        console.log(`✅ ${email} → H列に ${code} を書き込みました`);
+        return;
+      }
+    }
+    console.log(`❌ ${email} → 行が見つかりませんでした`);
+  });
+}
+
+
+/****************************************************
  * 手動テスト：Stripe購入情報を仮登録
  ****************************************************/
 function testSaveStripePurchase() {
