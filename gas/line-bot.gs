@@ -38,17 +38,26 @@ const PRODUCTS = {
     sheetName:   'スタート講座購入者',
     productName: 'AI副業1日1時間化スタート講座',
     keyword:     '1時間化スタート',
+    courseUrl:   'https://celadon-brioche-b5ab0a.netlify.app/',
+    imageUrl:    'https://www.genspark.ai/api/files/s/s0Q2eoYf',
+    courseLabel: 'AI副業1時間化スタート講座を受け取る',
   },
   '本気でプロアフィリエイター': {
     sheetName:   'アフィリエイター養成講座購入者',
     productName: 'プロAIアフィリエイター養成講座',
     keyword:     '本気でプロアフィリエイター',
+    courseUrl:   'https://AFFILIATE_COURSE_URL_HERE/',  // ← 養成講座URLに変更
+    imageUrl:    'https://www.genspark.ai/api/files/s/JAAmhTXR',
+    courseLabel: 'プロAIアフィリエイター養成講座を受け取る',
   },
   // 将来の講座を追加するときはここに追記するだけ：
   // '新講座の合言葉': {
   //   sheetName:   '新講座購入者',
   //   productName: '新講座の商品名',
   //   keyword:     '新講座の合言葉',
+  //   courseUrl:   'https://...',
+  //   imageUrl:    'https://...',
+  //   courseLabel: '講座を受け取る',
   // },
 };
 
@@ -78,18 +87,13 @@ const COL_CONSENT_AT       = 13; // M: 同意日時
 /****************************************************
  * 自動返信文
  ****************************************************/
-const FOLLOW_TEXT = `ご登録ありがとうございます！
+const FOLLOW_TEXT = `友だち追加ありがとうございます！🎉
 
-購入者確認を行います。
-サンクスページに表示されている内容を、このLINEにそのまま送ってください。
+購入した講座のサンクスページに表示されている
+「合言葉」と「購入コード」をそのままこのトークに送ってください📩
 
 例）
 1時間化スタート
-購入コード：start_xxxxxxxxxxxxxxxx
-
-または
-
-本気でプロアフィリエイター
 購入コード：start_xxxxxxxxxxxxxxxx`;
 
 const ASK_EMAIL_TEXT = `購入時に使ったメールアドレスを、このトークにそのまま入力してください。
@@ -107,10 +111,10 @@ const EMAIL_ERROR_TEXT = `メールアドレスの形式が正しくないかも
 例）
 sample@gmail.com`;
 
-const LINK_SUCCESS_TEXT = `確認できました！
+const LINK_SUCCESS_TEXT = `確認できました！✅
 
-購入者LINEとして登録しました。
-このあと、講座本編・特典の受け取り案内をご確認ください。`;
+購入者として登録しました🎊
+下のボタンから講座を受け取ってください👇`;
 
 const LINK_NEED_CODE_TEXT = `合言葉を確認しました。
 
@@ -223,8 +227,10 @@ function handleLineWebhook(body) {
 
         if (alreadyLinked) {
           pushTextMessage(userId, '✅ 購入確認済みです。\n\n既に登録済みです。講座URLは以前お送りしたメッセージをご確認ください。');
+          pushCourseCard(userId, matchedProduct);
         } else {
           pushTextMessage(userId, LINK_SUCCESS_TEXT);
+          pushCourseCard(userId, matchedProduct);
         }
         return;
       }
@@ -672,6 +678,62 @@ function pushTextMessage(userId, text) {
     });
   } catch (err) {
     console.error('[pushTextMessage] error:', err.message);
+  }
+}
+
+
+/****************************************************
+ * 講座カード（Flex Message）を送る
+ * 画像サムネイル＋講座URLボタン
+ ****************************************************/
+function pushCourseCard(userId, product) {
+  try {
+    const flexMessage = {
+      type: 'flex',
+      altText: product.courseLabel,
+      contents: {
+        type: 'bubble',
+        hero: {
+          type: 'image',
+          url: product.imageUrl,
+          size: 'full',
+          aspectRatio: '1:1',
+          aspectMode: 'cover',
+          action: {
+            type: 'uri',
+            uri: product.courseUrl,
+          },
+        },
+        footer: {
+          type: 'box',
+          layout: 'vertical',
+          spacing: 'sm',
+          contents: [
+            {
+              type: 'button',
+              style: 'primary',
+              color: '#FF6B35',
+              height: 'sm',
+              action: {
+                type: 'uri',
+                label: product.courseLabel,
+                uri: product.courseUrl,
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    UrlFetchApp.fetch('https://api.line.me/v2/bot/message/push', {
+      method:      'post',
+      contentType: 'application/json',
+      headers:     { Authorization: `Bearer ${CHANNEL_ACCESS_TOKEN}` },
+      payload:     JSON.stringify({ to: userId, messages: [flexMessage] }),
+      muteHttpExceptions: true,
+    });
+  } catch (err) {
+    console.error('[pushCourseCard] error:', err.message);
   }
 }
 
